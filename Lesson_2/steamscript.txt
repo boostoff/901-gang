@@ -1,0 +1,174 @@
+
+CREATE TABLE IF NOT EXISTS `broadcast` (
+  `uidprofile_broadcast` INT NOT NULL,
+  `idprofile_broadcast` VARCHAR(45) NOT NULL,
+  `game_broadcast` VARCHAR(45) NOT NULL,
+  `view_broadcast` VARCHAR(45) NOT NULL,
+  `name_broadcast` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`uidprofile_broadcast`))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `workshop` (
+  `id_workshop` INT NOT NULL,
+  `game_workshop` VARCHAR(45) NOT NULL,
+  `item_workshop` VARCHAR(45) NOT NULL,
+  `name_workshop` VARCHAR(45) NOT NULL,
+  `rating_workshop` DECIMAL(5) NOT NULL,
+  `idprofile_workshop` VARCHAR(45) NOT NULL,
+  `posted_workshop` DATE NOT NULL,
+  PRIMARY KEY (`id_workshop`))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `market` (
+  `id_item` INT NOT NULL,
+  `name_item` VARCHAR(45) NOT NULL,
+  `price_item` VARCHAR(45) NOT NULL,
+  `quantiny_item` VARCHAR(45) NOT NULL,
+  `game_item` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_item`))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `friends` (
+  `uid_friends` INT NOT NULL,
+  `id_friends` VARCHAR(45) NOT NULL,
+  `name_friends` VARCHAR(45) NOT NULL,
+  `status_friends` VARCHAR(45) NOT NULL,
+  `avatar_friends` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`uid_friends`))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `group` (
+  `uidgroup` INT NOT NULL,
+  `idgroup` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `clantag` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`uidgroup`))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `screenshot` (
+  `id_screenshot` INT NOT NULL,
+  `game_screenshot` VARCHAR(45) NOT NULL,
+  `idprofile_screenshot` VARCHAR(45) NOT NULL,
+  `posted_screenshot` DATETIME NOT NULL,
+  `size_screenshot` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_screenshot`))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `disscusion` (
+  `id_disscusion` INT NOT NULL,
+  `game_disscusion` VARCHAR(45) NOT NULL,
+  `posted_disscution` DATE NOT NULL,
+  `idprofile_disscution` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_disscusion`))
+ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `games` (
+  `idgames` INT NOT NULL,
+  `name_games` VARCHAR(45) NOT NULL,
+  `price_games` VARCHAR(45) NOT NULL,
+  `disscusion_id_disscusion` INT NOT NULL,
+  `broadcast_uidprofile_broadcast` INT NOT NULL,
+  `workshop_id_workshop` INT NOT NULL,
+  PRIMARY KEY (`idgames`),
+  INDEX `fk_games_disscusion1_idx` (`disscusion_id_disscusion` ASC) VISIBLE,
+  INDEX `fk_games_broadcast1_idx` (`broadcast_uidprofile_broadcast` ASC) VISIBLE,
+  INDEX `fk_games_workshop1_idx` (`workshop_id_workshop` ASC) VISIBLE,
+  CONSTRAINT `fk_games_disscusion1`
+    FOREIGN KEY (`disscusion_id_disscusion`)
+    REFERENCES `mydb`.`disscusion` (`id_disscusion`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_games_broadcast1`
+    FOREIGN KEY (`broadcast_uidprofile_broadcast`)
+    REFERENCES `mydb`.`broadcast` (`uidprofile_broadcast`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_games_workshop1`
+    FOREIGN KEY (`workshop_id_workshop`)
+    REFERENCES `mydb`.`workshop` (`id_workshop`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `profile` (
+  `uidprofile` INT NOT NULL,
+  `id_profile` VARCHAR(45) NOT NULL,
+  `name_profile` VARCHAR(45) NOT NULL,
+  `avatar_profile` VARCHAR(45) NOT NULL,
+  `inv_profile` VARCHAR(45) NOT NULL,
+  `status_profile` VARCHAR(45) NOT NULL,
+  `broadcast_uidprofile_broadcast` INT NOT NULL,
+  `workshop_id_workshop` INT NOT NULL,
+  `market_id_item` INT NOT NULL,
+  `friends_uid_friends` INT NOT NULL,
+  `group_uidgroup` INT NOT NULL,
+  `screenshot_id_screenshot` INT NOT NULL,
+  `disscusion_id_disscusion` INT NOT NULL,
+  `games_idgames` INT NOT NULL,
+  PRIMARY KEY (`uidprofile`),
+  INDEX `fk_profile_broadcast_idx` (`broadcast_uidprofile_broadcast` ASC) VISIBLE,
+  INDEX `fk_profile_workshop1_idx` (`workshop_id_workshop` ASC) VISIBLE,
+  INDEX `fk_profile_market1_idx` (`market_id_item` ASC) VISIBLE,
+  INDEX `fk_profile_friends1_idx` (`friends_uid_friends` ASC) VISIBLE,
+  INDEX `fk_profile_group1_idx` (`group_uidgroup` ASC) VISIBLE,
+  INDEX `fk_profile_screenshot1_idx` (`screenshot_id_screenshot` ASC) VISIBLE,
+  INDEX `fk_profile_disscusion1_idx` (`disscusion_id_disscusion` ASC) VISIBLE,
+  INDEX `fk_profile_games1_idx` (`games_idgames` ASC) VISIBLE,
+  CONSTRAINT `fk_profile_broadcast`
+    FOREIGN KEY (`broadcast_uidprofile_broadcast`)
+    REFERENCES `mydb`.`broadcast` (`uidprofile_broadcast`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_profile_workshop1`
+    FOREIGN KEY (`workshop_id_workshop`)
+    REFERENCES `mydb`.`workshop` (`id_workshop`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_profile_market1`
+    FOREIGN KEY (`market_id_item`)
+    REFERENCES `mydb`.`market` (`id_item`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_profile_friends1`
+    FOREIGN KEY (`friends_uid_friends`)
+    REFERENCES `mydb`.`friends` (`uid_friends`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_profile_group1`
+    FOREIGN KEY (`group_uidgroup`)
+    REFERENCES `mydb`.`group` (`uidgroup`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_profile_screenshot1`
+    FOREIGN KEY (`screenshot_id_screenshot`)
+    REFERENCES `mydb`.`screenshot` (`id_screenshot`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_profile_disscusion1`
+    FOREIGN KEY (`disscusion_id_disscusion`)
+    REFERENCES `mydb`.`disscusion` (`id_disscusion`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_profile_games1`
+    FOREIGN KEY (`games_idgames`)
+    REFERENCES `mydb`.`games` (`idgames`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `signin` (
+  `id_signin` INT NOT NULL,
+  `login_signin` VARCHAR(45) NOT NULL,
+  `password_signin` VARCHAR(45) NOT NULL,
+  `profile_uidprofile` INT NOT NULL,
+  PRIMARY KEY (`id_signin`),
+  INDEX `fk_signin_profile1_idx` (`profile_uidprofile` ASC) VISIBLE,
+  CONSTRAINT `fk_signin_profile1`
+    FOREIGN KEY (`profile_uidprofile`)
+    REFERENCES `mydb`.`profile` (`uidprofile`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
